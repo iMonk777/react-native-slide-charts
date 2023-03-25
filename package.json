@@ -5,10 +5,10 @@
   "homepage": "https://github.com/imonk777/react-native-slide-charts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/imonk777/react-native-slide-charts"
+    "url": "git+https://github.com/imonk777/react-native-slide-charts.git"
   },
   "publishConfig": {
-    "access": "public"   
+    "access": "public"
   },
   "main": "src/Charts.ts",
   "types": "src/react-native-slide-charts.d.ts",
@@ -35,7 +35,6 @@
   ],
   "author": "Connected Cars <oss@imonk777.io>",
   "license": "MIT",
-  "readmeFilename": "README.md",
   "files": [
     "src"
   ],
@@ -74,5 +73,8 @@
     "react-native-gesture-handler": "1.6.0",
     "react-native-svg": "11.0.1",
     "typescript": "4.2.2"
+  },
+  "bugs": {
+    "url": "https://github.com/imonk777/react-native-slide-charts/issues"
   }
 }
