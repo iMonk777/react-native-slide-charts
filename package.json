@@ -1,11 +1,11 @@
 {
-  "name": "@connectedcars/react-native-slide-charts",
+  "name": "@imonk777/react-native-slide-charts",
   "version": "1.0.5",
   "description": "React Native Slide Charts uses react-native-svg, d3, and react-native-gesture-handler to create interactive charts.",
-  "homepage": "https://github.com/connectedcars/react-native-slide-charts",
+  "homepage": "https://github.com/imonk777/react-native-slide-charts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/connectedcars/react-native-slide-charts"
+    "url": "https://github.com/imonk777/react-native-slide-charts"
   },
   "publishConfig": {
     "access": "public"   
@@ -33,7 +33,7 @@
     "graphs",
     "d3"
   ],
-  "author": "Connected Cars <oss@connectedcars.io>",
+  "author": "Connected Cars <oss@imonk777.io>",
   "license": "MIT",
   "readmeFilename": "README.md",
   "files": [
