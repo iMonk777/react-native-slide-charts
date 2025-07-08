@@ -4,7 +4,9 @@ import { GradientProps } from '../../charts/utils/types'
 
 type AxisProps = {
   data: Array<{ x: number | Date; y: number }>
+  // @ts-ignore
   scaleX: ScaleTime<number, number> | ScaleLinear<number, number>
+  // @ts-ignore
   scaleY: ScaleLinear<number, number>
   yRange: [number, number]
   width: number
@@ -60,6 +62,7 @@ export type YAxisDefaultProps = {
     props: GradientProps & { count: number }
   ) => JSX.Element | null
   averageLineColor: string
+  roundYLabel?: boolean
   verticalLineWidth: number
   horizontalLineWidth: number
   showBaseLine: boolean

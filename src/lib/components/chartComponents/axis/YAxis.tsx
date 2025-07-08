@@ -21,6 +21,7 @@ class YAxis extends Component<YAxisComponentProps> {
     fullBaseLine: false,
     averageLineColor: averageLineDefaultColor,
     markFirstLine: false,
+    roundYLabel: false,
     showBaseLine: true,
     labelTopPadding: 4,
     axisLabelAlignment: YAxisLabelAlignment.aboveTicks,
@@ -155,6 +156,7 @@ class YAxis extends Component<YAxisComponentProps> {
             key: `${i}-text`,
             labelStyle: axisMarkerStyle,
             label: roundYLabel ? Math.round(yRange[0] + (i * tickInterval)) : yRange[0] + (i * tickInterval)
+            // label: yRange[0] + (i * tickInterval)
           }))
         }
       }

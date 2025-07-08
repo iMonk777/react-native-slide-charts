@@ -64,6 +64,7 @@ type SharedChartDefaultProps = {
   animated: boolean
   shouldCancelWhenOutside: boolean
   throttleAndroid: boolean
+  snapToValues?: boolean
 }
 
 type SharedBarChartProps = {

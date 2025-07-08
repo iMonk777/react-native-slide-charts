@@ -237,14 +237,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 1.5 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
         paddingBottom: 4,
+        paddingTop: 2
       },
       android: {
-        elevation: 8,
+        paddingBottom: 4,
+        paddingTop: 3,
       },
     }),
   },

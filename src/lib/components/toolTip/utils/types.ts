@@ -4,7 +4,9 @@ import { ScaleTime, ScaleLinear } from 'd3'
 export type ToolTipTextRenderersInput = {
   x: number
   y: number
+  // @ts-ignore
   scaleX: ScaleTime<number, number> | ScaleLinear<number, number>
+  // @ts-ignore
   scaleY: ScaleLinear<number, number>
   selectedBarNumber: number
 }
