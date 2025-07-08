@@ -20,6 +20,7 @@ type YAxisPartialProps = {
   verticalLineWidth?: number
   interval?: number
   numberOfTicks?: number
+  roundYLabel?: boolean
   axisLabel?: string
   verticalLineColor?: string
   horizontalLineColor?: string

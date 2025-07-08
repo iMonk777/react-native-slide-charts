@@ -1721,6 +1721,27 @@ Number of ticks the chart should have, spaced via [`interval`](#interval).
 <tr>
 <td align="center">
   
+  ##### `roundYLabel`
+</td>
+<td align="center">
+
+`boolean`
+
+</td>
+<td align="center">
+
+`undefined`
+
+</td>
+<td align="left">
+
+Removes the decimal places from the Y-Axis labels.
+
+</td>
+</tr>
+<tr>
+<td align="center">
+  
   ##### `renderHorizontalLineGradient`
 </td>
 <td align="center">
