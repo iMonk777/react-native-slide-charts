@@ -21,13 +21,14 @@ class CursorIndicator extends Component<CursorIndicatorProps> {
   }
 
   render() {
-    const { cursorRadius, borderColor, backgroundColor } = this.props
+    const { cursorRadius, borderColor, backgroundColor, opacity } = this.props
     const cursorStyle = {
       width: cursorRadius * 2,
       height: cursorRadius * 2,
       borderRadius: cursorRadius,
       borderColor,
       backgroundColor,
+      opacity: opacity
     }
     return (
       <Animated.View

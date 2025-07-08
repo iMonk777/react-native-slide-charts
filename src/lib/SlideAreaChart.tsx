@@ -16,15 +16,44 @@ import { interpolatePath } from 'd3-interpolate-path'
 import { ExtendedAnimatedValue, SlideAreaChartComponentProps, SlideAreaChartDefaultProps, SlideAreaChartProps } from './utils/types'
 import { isValidDate, getDataMin, getDataMax } from './utils/range'
 
+function divideRange(start, end, numDivisions) {
+  const range = end - start;
+  const interval = range / numDivisions;
+  const result = [];
+
+  for (let i = 0; i <= numDivisions; i++) {
+    result.push(start + i * interval);
+  }
+
+  return result;
+}
+
+function findClosestValue(value, dividedRanges) {
+  let closestValue = dividedRanges[0];
+  let minDifference = Math.abs(value - closestValue);
+
+  for (let i = 1; i < dividedRanges.length; i++) {
+    const difference = Math.abs(value - dividedRanges[i]);
+    if (difference < minDifference) {
+      closestValue = dividedRanges[i];
+      minDifference = difference;
+    }
+  }
+
+  return closestValue;
+}
+
 type State = {
   x: ExtendedAnimatedValue
   cursorY: Animated.Value,
+  didMoveOnce: boolean,
 }
 
 const defaultCursorProps = {
   cursorMarkerHeight: 24,
   cursorMarkerWidth: 24,
   cursorWidth: 2,
+  opacity: isAndroid() ? 0 : 1,
 }
 
 class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
@@ -50,6 +79,7 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     animated: true,
     shouldCancelWhenOutside: true,
     throttleAndroid: false,
+    snapToValues: false,
   }
 
   cursor = React.createRef<Cursor>()
@@ -76,7 +106,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     x: new Animated.Value(
       (this.props.width - this.props.axisWidth - this.props.paddingLeft - this.props.paddingRight) / 2
     ) as ExtendedAnimatedValue,
-    cursorY: new Animated.Value(0)
+    cursorY: new Animated.Value(0),
+    didMoveOnce: false,
   }
 
   // Function to determine X range if not given
@@ -149,7 +180,7 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
   }
 
   // Animates the initial rendering of the chart vertically
-  animateChart = (value: number) => {
+  animateChart = (value: number, initialRender?: boolean) => {
     const { axisWidth, cursorProps, toolTipProps, paddingLeft } = this.props
     const toolTipTextRenderers = toolTipProps?.toolTipTextRenderers || []
     const cursorMarkerHeight = cursorProps?.cursorMarkerHeight ?? defaultCursorProps.cursorMarkerHeight
@@ -159,9 +190,12 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
 
     // If chart shrinks animate X as well
     const stateX = this.state.x.__getValue?.()
-    let x = this.chartWidth / 2 + axisWidth + paddingLeft
+
+    const xDivider = initialRender ? 1 : 2
+    let x = this.chartWidth / xDivider + axisWidth + paddingLeft
+
     let oldX: number | undefined = undefined
-    if (stateX != null) {
+    if (stateX != null && !initialRender) {
       x = stateX + axisWidth + paddingLeft
       if (stateX > this.chartWidth) {
         oldX = stateX
@@ -175,6 +209,10 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     const startY = SVGPathYFromX(this.previousProperties, x)
     const y = SVGPathYFromX(this.properties, x)
 
+    // If snapToValues is true, no need to move the tooltip, the first value on iOS is correct
+    if (this.props.snapToValues && !isAndroid()) {
+      return
+    }
     /**
      * Create an interpolator between a flat line and our chart line and use that for the animation
      * additionally the tool tip and cursor are also started at zero and moved upward with the animation
@@ -182,6 +220,7 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     const interpolator = interpolatePath(this.startLine, this.line, null)
     if (this.cursor.current != null) {
       this.cursor.current.setNativeCursorIndicatorProps({
+        opacity: 1,
         top: ((1 - value) * startY) - cursorMarkerHeight / 2 + (y * value),
         left: oldX != null ?
           ((1 - value) * oldX) - cursorMarkerWidth / 2 + (x * value) :
@@ -194,6 +233,10 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
           ((1 - value) * oldX) - cursorLineWidth / 2 + (x * value) :
           x - cursorLineWidth / 2
       })
+    }
+    // If snapToValues is true, no need to move the tooltip, as it becomes laggy
+    if (this.props.snapToValues && isAndroid()) {
+      return
     }
     const toolTipX = oldX != null ?
       ((1 - value) * oldX) + (x * value) :
@@ -304,9 +347,17 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     if (value < 0) {
       value = 0
     } else if (value > this.chartWidth) {
-      value = this.chartWidth
+      if (this.props.snapToValues) {
+        value = this.chartWidth + this.props.paddingLeft
+      } else {
+        value = this.chartWidth
+      }
     }
-    const x = value + axisWidth + paddingLeft
+
+    let x = value + axisWidth + paddingLeft
+    if (this.props.snapToValues) {
+      x = value
+    }
 
     // A binary search is used to get the Y value for a given X
     const y = SVGPathYFromX(this.properties, x)
@@ -334,7 +385,7 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
         this.toolTip.current.setNativeTextProps(
           i,
           toolTipTextRenderers[i]({
-            x,
+            x: x,
             y,
             scaleX: this.scaleX,
             scaleY: this.scaleY,
@@ -445,6 +496,7 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
   }
 
   componentDidMount() {
+
     const {
       axisWidth, alwaysShowIndicator, callbackWithX, callbackWithY, animated, paddingLeft,
     } = this.props
@@ -456,7 +508,11 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     this.properties = path.svgPathProperties(this.line)
 
     if (alwaysShowIndicator) {
-      this.moveCursorBinary(this.chartWidth / 2)
+      if (this.props.snapToValues) {
+        this.moveCursorBinary(this.chartWidth + paddingLeft)
+      } else {
+        this.moveCursorBinary(this.chartWidth / 2)
+      }
     }
 
     /**
@@ -476,7 +532,6 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     }
 
     setTimeout(() => {
-
       /**
        * Run callback on mount as we are skipping the initial Android movement to the position
        * due to it not being mounted at the proper time as noted above
@@ -498,7 +553,7 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
 
         // If we aren't animating the chart run the animate chart function at 1 to move 
         // the chart to the first position completely including any toolTip height calculations
-        this.animateChart(1)
+        this.animateChart(1, isAndroid() && this.props.snapToValues)
         this.state.x.addListener(({ value }) => { this.moveCursorBinary(value) })
       }
 
@@ -548,8 +603,23 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
       // If we aren't animating the chart run the animate chart function at 1
       // to move the chart to the new position completely
       this.isAnimating = false
-      this.animateChart(1)
-      this.state.x.addListener(({ value }) => { this.moveCursorBinary(value) })
+      this.animateChart(1, isAndroid() && this.props.snapToValues && !this.state.didMoveOnce)
+      this.state.didMoveOnce = true
+      this.state.x.addListener(({ value }) => {
+
+        if (this.props.snapToValues) {
+          const chartEndX = this.chartWidth + this.props.axisWidth + this.props.paddingLeft
+          const chartStartX = this.props.axisWidth + this.props.paddingLeft
+
+          const divisions = divideRange(chartStartX, chartEndX, this.props.data.length - 1);
+
+
+          const closestValue = findClosestValue(value, divisions);
+          this.moveCursorBinary(closestValue)
+        } else {
+          this.moveCursorBinary(value)
+        }
+      })
     }
   }
 
@@ -581,9 +651,10 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
 
     this.chartWidth = width - axisWidth - paddingLeft - paddingRight
 
-    const combinedCursorProps={...defaultCursorProps, ...cursorProps}
+    const combinedCursorProps = { ...defaultCursorProps, ...cursorProps }
     const yRangeCalculated = this.calculateYRange()
     const xRangeCalculated = this.calculateXRange()
+
     const xCalculatedScale = xScale ? xScale :
       isValidDate((data[0]?.x ?? 0)) ? 'time' : 'linear'
     this.scaleX = xCalculatedScale === 'linear' ?

@@ -34,6 +34,7 @@ class Cursor extends Component<CursorComponentProps> {
       cursorBorderColor,
       renderCursorMarker,
       cursorMarkerWidth,
+      opacity,
     } = this.props
 
     // Custom cursor marker
@@ -47,6 +48,7 @@ class Cursor extends Component<CursorComponentProps> {
         cursorRadius={cursorMarkerWidth / 2}
         borderColor={cursorBorderColor}
         backgroundColor={cursorColor}
+        opacity={opacity}
       />
     )
   }
