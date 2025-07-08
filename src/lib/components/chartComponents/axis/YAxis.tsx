@@ -41,20 +41,20 @@ class YAxis extends Component<YAxisComponentProps> {
     textAnchor,
     rotated
   }: YAxisMarkerProps) => (
-      <Text
-        x={x}
-        y={y}
-        fill={fill}
-        alignmentBaseline={alignmentBaseline}
-        textAnchor={textAnchor || 'end'}
-        key={key}
-        transform={rotated ? `rotate(270, ${x}, ${y})` : undefined}
-      >
-        <TSpan {...labelStyle}>
-          {label}
-        </TSpan>
-      </Text>
-    )
+    <Text
+      x={x}
+      y={y}
+      fill={fill}
+      alignmentBaseline={alignmentBaseline}
+      textAnchor={textAnchor || 'end'}
+      key={key}
+      transform={rotated ? `rotate(270, ${x}, ${y})` : undefined}
+    >
+      <TSpan {...labelStyle}>
+        {label}
+      </TSpan>
+    </Text>
+  )
 
   // Only update axis if the data or width changes
   shouldComponentUpdate(nextProps: YAxisComponentProps) {
@@ -89,6 +89,7 @@ class YAxis extends Component<YAxisComponentProps> {
       verticalLineWidth,
       axisLabelStyle,
       axisMarkerStyle,
+      roundYLabel,
       axisAverageMarkerStyle,
       horizontalLineWidth,
       horizontalLineColor,
@@ -153,7 +154,7 @@ class YAxis extends Component<YAxisComponentProps> {
               'middle',
             key: `${i}-text`,
             labelStyle: axisMarkerStyle,
-            label: yRange[0] + (i * tickInterval)
+            label: roundYLabel ? Math.round(yRange[0] + (i * tickInterval)) : yRange[0] + (i * tickInterval)
           }))
         }
       }

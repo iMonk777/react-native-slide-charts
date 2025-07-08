@@ -205,7 +205,7 @@ class ToolTip extends Component<ToolTipComponentProps, State> {
     return (
       <Animated.View
         ref={this.toolTip}
-        style={[styles.container, { height: this.state.height }, height ? { height } : null, width ? { width } : null]}
+        style={[styles.container, { height: this.state.height }, height ? { height } : null, width ? { width } : null, { marginTop: 20 }]}
       >
         <View
           style={[
