@@ -40,4 +40,6 @@ export type AreaChartProps = SharedChartProps & {
   line: string
   chartLineColor: string
   chartLineWidth: number
+  showLineDots?: boolean
+  roundYLabel?: boolean
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Svg, Defs } from 'react-native-svg'
+import { Svg, Defs, Circle } from 'react-native-svg'
 import YAxis from '../axis/YAxis'
 import XAxis from '../axis/XAxis'
 import AnimatedPath from '../../AnimatedPath'
@@ -59,6 +59,8 @@ class AreaChart extends Component<AreaChartProps> {
       paddingRight,
       paddingTop,
       paddingBottom,
+      showLineDots = false,
+      dotsColor,
     } = this.props
 
     const startX = data.length > 1 ? scaleX(data[0].x) : axisWidth + paddingLeft
@@ -111,6 +113,17 @@ class AreaChart extends Component<AreaChartProps> {
           stroke={chartLineColor}
           strokeWidth={chartLineWidth}
         />
+        {!!showLineDots && (
+          data.map((point, index) => (
+            <Circle
+              key={`dot-${index}`}
+              cx={scaleX(point.x)}
+              cy={scaleY(point.y)}
+              r={3} // Adjust radius as needed
+              fill={dotsColor || "white"} // Use same color or any you prefer
+            />
+          ))
+        )}
       </Svg>
     )
   }

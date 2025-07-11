@@ -46,7 +46,10 @@ class XAxis extends Component<XAxisComponentProps> {
     labelStyle,
     label,
     alignmentBaseline
-  }: XAxisMarkerProps) => (
+  }: XAxisMarkerProps) => {
+    const lines = typeof label === 'string' ? label.split('\n') : [label]
+
+    return (
       <Text
         x={x}
         y={y}
@@ -55,11 +58,19 @@ class XAxis extends Component<XAxisComponentProps> {
         textAnchor={textAnchor}
         key={key}
       >
-        <TSpan {...labelStyle} >
-          {label}
-        </TSpan>
+        {lines.map((line, index) => (
+          <TSpan
+            key={index}
+            dy={index === 0 ? 0 : '1.2em'}
+            x={x}
+            {...labelStyle}
+          >
+            {line}
+          </TSpan>
+        ))}
       </Text>
-    )
+    );
+  };
 
   // For charts that want an x-label, label can be left, right, or center justified
   // If the chart has markers and a label the label is pinned to the bottom
