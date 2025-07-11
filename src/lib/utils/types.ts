@@ -94,6 +94,9 @@ export type SlideAreaChartProps = SharedChartProps & {
   cursorProps?: CursorProps
   chartLineColor?: string
   chartLineWidth?: number
+  showLineDots?: boolean
+  dotsColor?: string
+  snapToValues?: boolean
 }
 
 export type SlideAreaChartDefaultProps = SharedChartDefaultProps & {
@@ -101,6 +104,8 @@ export type SlideAreaChartDefaultProps = SharedChartDefaultProps & {
   cursorProps: CursorProps
   chartLineColor: string
   chartLineWidth: number
+  showLineDots?: boolean
+  dotsColor?: string
 }
 
 export type SlideAreaChartComponentProps = SlideAreaChartDefaultProps &

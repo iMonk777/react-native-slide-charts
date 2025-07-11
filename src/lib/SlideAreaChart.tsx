@@ -80,6 +80,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     shouldCancelWhenOutside: true,
     throttleAndroid: false,
     snapToValues: false,
+    showLineDots: false,
+    dotsColor: "white",
   }
 
   cursor = React.createRef<Cursor>()
@@ -646,6 +648,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
       paddingLeft,
       paddingRight,
       chartPaddingTop,
+      showLineDots,
+      dotsColor,
       onPress,
     } = this.props
 
@@ -708,6 +712,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
           paddingTop={paddingTop}
           xAxisProps={xAxisProps}
           yAxisProps={yAxisProps}
+          showLineDots={showLineDots}
+          dotsColor={dotsColor}
         />
         {!onPress && <Cursor
           ref={this.cursor}
