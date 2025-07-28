@@ -49,6 +49,7 @@ class AreaChart extends Component<AreaChartProps> {
       chartLineWidth,
       yRange,
       roundYLabel,
+      yMaxLabelDecimals,
       renderFillGradient,
       fillColor,
       chartLineColor,
@@ -78,6 +79,7 @@ class AreaChart extends Component<AreaChartProps> {
           width={width}
           height={height}
           roundYLabel={roundYLabel}
+          yMaxLabelDecimals={yMaxLabelDecimals}
           axisWidth={axisWidth}
           axisHeight={axisHeight}
           paddingLeft={paddingLeft}

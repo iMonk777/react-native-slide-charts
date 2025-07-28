@@ -23,6 +23,7 @@ type YAxisPartialProps = {
   interval?: number
   numberOfTicks?: number
   roundYLabel?: boolean
+  yMaxLabelDecimals?: number
   axisLabel?: string
   verticalLineColor?: string
   horizontalLineColor?: string
@@ -63,6 +64,7 @@ export type YAxisDefaultProps = {
   ) => JSX.Element | null
   averageLineColor: string
   roundYLabel?: boolean
+  yMaxLabelDecimals?: number
   verticalLineWidth: number
   horizontalLineWidth: number
   showBaseLine: boolean
