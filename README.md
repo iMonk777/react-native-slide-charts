@@ -1742,6 +1742,27 @@ Removes the decimal places from the Y-Axis labels.
 <tr>
 <td align="center">
   
+  ##### `yMaxLabelDecimals`
+</td>
+<td align="center">
+
+`number`
+
+</td>
+<td align="center">
+
+`undefined`
+
+</td>
+<td align="left">
+
+If roundYLabel is used, this will set the maximum number of decimal places to show on the Y-Axis labels, in case the label has decimals. If the number is integer, it will not show any decimal places.
+
+</td>
+</tr>
+<tr>
+<td align="center">
+  
   ##### `renderHorizontalLineGradient`
 </td>
 <td align="center">

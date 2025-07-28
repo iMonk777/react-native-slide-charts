@@ -42,4 +42,5 @@ export type AreaChartProps = SharedChartProps & {
   chartLineWidth: number
   showLineDots?: boolean
   roundYLabel?: boolean
+  yMaxLabelDecimals?: number
 }
