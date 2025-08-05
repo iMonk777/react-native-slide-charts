@@ -81,6 +81,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
     throttleAndroid: false,
     snapToValues: false,
     showLineDots: false,
+    hideFirstDot: false,
+    hideLastDot: false,
     dotsColor: "white",
   }
 
@@ -649,6 +651,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
       paddingRight,
       chartPaddingTop,
       showLineDots,
+      hideFirstDot,
+      hideLastDot,
       dotsColor,
       onPress,
     } = this.props
@@ -713,6 +717,8 @@ class SlideAreaChart extends Component<SlideAreaChartComponentProps, State> {
           xAxisProps={xAxisProps}
           yAxisProps={yAxisProps}
           showLineDots={showLineDots}
+          hideFirstDot={hideFirstDot}
+          hideLastDot={hideLastDot}
           dotsColor={dotsColor}
         />
         {!onPress && <Cursor
