@@ -95,6 +95,8 @@ export type SlideAreaChartProps = SharedChartProps & {
   chartLineColor?: string
   chartLineWidth?: number
   showLineDots?: boolean
+  hideFirstDot?: boolean
+  hideLastDot?: boolean
   dotsColor?: string
   snapToValues?: boolean
 }
@@ -105,6 +107,8 @@ export type SlideAreaChartDefaultProps = SharedChartDefaultProps & {
   chartLineColor: string
   chartLineWidth: number
   showLineDots?: boolean
+  hideFirstDot?: boolean
+  hideLastDot?: boolean
   dotsColor?: string
 }
 

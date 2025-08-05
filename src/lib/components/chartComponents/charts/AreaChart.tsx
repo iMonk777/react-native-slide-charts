@@ -61,6 +61,8 @@ class AreaChart extends Component<AreaChartProps> {
       paddingTop,
       paddingBottom,
       showLineDots = false,
+      hideFirstDot = false,
+      hideLastDot = false,
       dotsColor,
     } = this.props
 
@@ -116,15 +118,21 @@ class AreaChart extends Component<AreaChartProps> {
           strokeWidth={chartLineWidth}
         />
         {!!showLineDots && (
-          data.map((point, index) => (
-            <Circle
-              key={`dot-${index}`}
-              cx={scaleX(point.x)}
-              cy={scaleY(point.y)}
-              r={3} // Adjust radius as needed
-              fill={dotsColor || "white"} // Use same color or any you prefer
-            />
-          ))
+          data.map((point, index) => {
+            if(
+              (hideFirstDot && (index=== 0)) 
+              || (hideLastDot && (index === (data.length - 1)))
+            ) return null;
+            return (
+              <Circle
+                key={`dot-${index}`}
+                cx={scaleX(point.x)}
+                cy={scaleY(point.y)}
+                r={3} // Adjust radius as needed
+                fill={dotsColor || "white"} // Use same color or any you prefer
+              />
+            )
+          })
         )}
       </Svg>
     )
