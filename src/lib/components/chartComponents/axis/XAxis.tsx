@@ -109,7 +109,8 @@ class XAxis extends Component<XAxisComponentProps> {
     numberOfMarks: number,
     numberOfBars: number,
     marker: string,
-    i: number
+    i: number,
+    alignMarkerWithLabel?: boolean
   ): LabelAndAlignment => {
     const {
       axisMarkerLabels, specialStartMarker, specialEndMarker, data, scaleX, axisWidth,
@@ -125,10 +126,10 @@ class XAxis extends Component<XAxisComponentProps> {
           label: specialStartMarker || marker,
           markerAlignment: adjustForSpecialMarkers ?
             (specialStartMarker ? 'start' : 'middle') :
-            (numberOfBars === numberOfMarks ? 'middle' : 'start'),
+            ((alignMarkerWithLabel && (numberOfBars === numberOfMarks)) ? 'middle' : 'start'),
           specialX: adjustForSpecialMarkers ?
             (specialStartMarker ? startX : undefined) :
-            (numberOfBars === numberOfMarks ? undefined : startX),
+            ((alignMarkerWithLabel && (numberOfBars === numberOfMarks)) ? undefined : startX),
         }
       }
       if (i === numberOfMarks - 1) {
@@ -138,10 +139,10 @@ class XAxis extends Component<XAxisComponentProps> {
           label: specialEndMarker || marker,
           markerAlignment: adjustForSpecialMarkers ?
             (specialEndMarker ? 'end' : 'middle') :
-            (numberOfBars === numberOfMarks ? 'middle' : 'end'),
+            ((alignMarkerWithLabel && (numberOfBars === numberOfMarks)) ? 'middle' : 'end'),
           specialX: adjustForSpecialMarkers ?
             (specialEndMarker ? stopX : undefined) :
-            (numberOfBars === numberOfMarks ? undefined : stopX),
+            ((alignMarkerWithLabel && (numberOfBars === numberOfMarks)) ? undefined : stopX),
         }
       }
       if (markerSpacing) {
@@ -173,6 +174,7 @@ class XAxis extends Component<XAxisComponentProps> {
       axisHeight,
       paddingLeft,
       paddingRight,
+      alignMarkerWithLabel,
     } = this.props
 
     if (axisHeight === 0) { return null }
@@ -203,12 +205,11 @@ class XAxis extends Component<XAxisComponentProps> {
             chartWidth
           markerX = startX + (i * (barWidthFromSpacing + barSpacing)) + (barWidthFromSpacing / 2)
         }
-        labelAndAlignment = this.determineLabelAndAlignment(numberOfMarks, numberOfBars, marker, i)
+        labelAndAlignment = this.determineLabelAndAlignment(numberOfMarks, numberOfBars, marker, i, alignMarkerWithLabel)
       } else {
-
         // If we have labels that are not in alignment with each bar we evenly distribute them
         markerX = numberOfMarks > 1 ? startX + (i * chartWidth / (numberOfMarks - 1)) : startX + chartWidth / 2
-        labelAndAlignment = this.determineLabelAndAlignment(numberOfMarks, numberOfBars, marker, i)
+        labelAndAlignment = this.determineLabelAndAlignment(numberOfMarks, numberOfBars, marker, i, alignMarkerWithLabel)
       }
       return this.renderAxisMarker({
         x: labelAndAlignment.specialX ?? markerX,
