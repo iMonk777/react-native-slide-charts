@@ -108,6 +108,7 @@ export type XAxisProps = XAxisPartialProps & {
   adjustForSpecialMarkers?: boolean
   minimumSpacing?: number
   labelBottomOffset?: number
+  alignMarkerWithLabel?: boolean
 }
 
 export type XAxisDefaultProps = {
@@ -119,6 +120,7 @@ export type XAxisDefaultProps = {
   adjustForSpecialMarkers: boolean
   minimumSpacing: number
   labelBottomOffset: number
+  alignMarkerWithLabel?: boolean
 }
 
 export type XAxisComponentProps = XAxisDefaultProps &
